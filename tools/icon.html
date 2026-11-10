@@ -1,0 +1,34 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Icon generator</title>
+<style>body{background:#333;color:#ddd;font:14px sans-serif;padding:20px}canvas{background:repeating-conic-gradient(#555 0 25%,#444 0 50%) 0 0/24px 24px;margin:8px;width:256px;height:256px}</style></head>
+<body>
+<p>Greyscale store assets for Even Hub. <code>window.exportIcons()</code> returns PNG data URLs.</p>
+<canvas id="icon" width="1024" height="1024"></canvas>
+<canvas id="bg" width="1024" height="1024"></canvas>
+<script>
+  // Foreground: white glyph on transparent — a chamfered minimap frame with the
+  // player arrow. Background: flat dark grey with a faint chamfer motif.
+  const icon = document.getElementById('icon'), c = icon.getContext('2d')
+  const S = 1024
+  function chamfer(ctx, x, y, w, h, cut) {
+    ctx.beginPath(); ctx.moveTo(x + cut, y); ctx.lineTo(x + w, y); ctx.lineTo(x + w, y + h - cut)
+    ctx.lineTo(x + w - cut, y + h); ctx.lineTo(x, y + h); ctx.lineTo(x, y + cut); ctx.closePath()
+  }
+  c.clearRect(0, 0, S, S)
+  c.lineJoin = 'miter'; c.strokeStyle = '#fff'; c.lineWidth = 58
+  chamfer(c, 150, 150, 724, 724, 120); c.stroke()
+  // compass ticks along the top edge
+  c.fillStyle = '#fff'
+  for (let i = 0; i < 7; i++) { const x = 300 + i * 70; const major = i === 3; c.fillRect(x - 8, 150 - 12, 16, major ? 96 : 60) }
+  // player arrow
+  c.beginPath(); c.moveTo(512, 330); c.lineTo(700, 730); c.lineTo(512, 640); c.lineTo(324, 730); c.closePath(); c.fill()
+
+  const bg = document.getElementById('bg'), b = bg.getContext('2d')
+  b.fillStyle = '#161616'; b.fillRect(0, 0, S, S)
+  b.strokeStyle = '#2a2a2a'; b.lineWidth = 6
+  for (let d = -S; d < 2 * S; d += 96) { b.beginPath(); b.moveTo(d, 0); b.lineTo(d + S, S); b.stroke() }
+  b.fillStyle = '#101010'; chamfer(b, 96, 96, 832, 832, 140); b.fill()
+
+  window.exportIcons = () => ({ icon: icon.toDataURL('image/png'), bg: bg.toDataURL('image/png') })
+</script>
+</body></html>

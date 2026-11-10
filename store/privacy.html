@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cyberpunk HUD – Privacy Policy</title>
+  <style>
+    body { max-width: 720px; margin: 40px auto; padding: 0 20px; font: 16px/1.6 -apple-system, system-ui, sans-serif; color: #222; }
+    h1 { font-size: 26px; } h2 { font-size: 19px; margin-top: 32px; }
+    code { background: #f2f2f2; padding: 1px 4px; }
+  </style>
+</head>
+<body>
+  <h1>Cyberpunk HUD – Privacy Policy</h1>
+  <p><em>Last updated: 5 September 2026</em></p>
+
+  <p>Cyberpunk HUD ("the app") is an app for Even Realities G2 glasses that shows a
+  heads-up display with a map of your surroundings, the time, your speed and heading,
+  and battery levels. This policy explains what data the app uses and where it goes.</p>
+
+  <h2>Summary</h2>
+  <ul>
+    <li>The app has no server of its own and no user accounts.</li>
+    <li>We (the developer) do not collect, store, or receive any of your data.</li>
+    <li>Your location is processed on your phone and sent only to the two OpenStreetMap
+      services listed below, solely to fetch map data and street names.</li>
+    <li>No analytics, advertising, or tracking of any kind.</li>
+  </ul>
+
+  <h2>Permissions the app requests</h2>
+
+  <h3>Location</h3>
+  <p>The app reads your phone's GPS position (latitude, longitude, accuracy, altitude,
+  speed, and heading) while it is running. It is used to:</p>
+  <ul>
+    <li>draw the minimap centred on you and rotate it to your heading,</li>
+    <li>show the name of the street you are on,</li>
+    <li>show your speed, heading, and altitude,</li>
+    <li>compute the distance and bearing to a destination you enter.</li>
+  </ul>
+  <p>Location data is kept in memory on your phone only. It is not stored on disk
+  (except a destination you deliberately save, see below) and is never sent to the
+  developer.</p>
+
+  <h3>Network</h3>
+  <p>The app contacts only these third-party services, and only with the minimum data
+  required:</p>
+  <ul>
+    <li><strong>Overpass API</strong> (<code>overpass-api.de</code>, <code>overpass.kumi.systems</code>):
+      receives a bounding box around your position (about 1.3 km square) to return
+      OpenStreetMap roads, water, and parks for the minimap. Requested at most once per
+      ~350 m you move.</li>
+    <li><strong>Nominatim</strong> (<code>nominatim.openstreetmap.org</code>): receives your
+      coordinates to return the street and neighbourhood name (at most once per 35 m /
+      12 s), and receives the text you type when searching for a destination.</li>
+    <li><strong>Open-Meteo</strong> (<code>api.open-meteo.com</code>): receives your coordinates
+      rounded to about 100 m to return the current temperature, at most once every 10 minutes
+      or after moving about 2 km. Its privacy policy:
+      <a href="https://open-meteo.com/en/terms">open-meteo.com/en/terms</a>.</li>
+  </ul>
+  <p>The first two are operated by the OpenStreetMap community and are subject to their
+  own privacy policies: <a href="https://osmfoundation.org/wiki/Privacy_Policy">OpenStreetMap
+  Foundation Privacy Policy</a>. Your IP address is visible to them as with any web
+  request. The developer never sees these requests.</p>
+
+  <h2>Data stored on your phone</h2>
+  <p>The app saves your settings (units, map orientation, zoom, map refresh interval,
+  demo-mode switch) and the destination you last entered (its name and coordinates) in
+  the app's local storage on your phone so they are remembered between launches. You can
+  clear the destination at any time with the "Clear" button or the glasses menu, and all
+  of it is deleted when you uninstall the app.</p>
+
+  <h2>Glasses data</h2>
+  <p>The app reads the glasses' battery level and connection state to display them. It
+  does not use the microphone, camera, or photo album.</p>
+
+  <h2>Children</h2>
+  <p>The app is not directed at children and collects no personal data from anyone.</p>
+
+  <h2>Changes</h2>
+  <p>If this policy changes, the updated version will be published at this address with a
+  new date.</p>
+
+  <h2>Contact</h2>
+  <p>Questions about this policy: <strong>[your contact email]</strong></p>
+</body>
+</html>

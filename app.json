@@ -1,0 +1,26 @@
+{
+  "package_id": "com.matthewspokes.cyberpunkhud",
+  "edition": "202601",
+  "name": "Cyberpunk HUD",
+  "version": "1.1.0",
+  "min_app_version": "2.2.9",
+  "min_sdk_version": "0.0.14",
+  "entrypoint": "index.html",
+  "permissions": [
+    {
+      "name": "location",
+      "desc": "Your position drives the minimap, street name, speed, heading and the destination tracker. It is used on your phone only and never stored or sent to us."
+    },
+    {
+      "name": "network",
+      "desc": "Fetches OpenStreetMap road data (Overpass API), street names / destination search (Nominatim) and the current temperature (Open-Meteo). Only your current coordinates are sent to those services.",
+      "whitelist": [
+        "https://overpass-api.de",
+        "https://overpass.kumi.systems",
+        "https://nominatim.openstreetmap.org",
+        "https://api.open-meteo.com"
+      ]
+    }
+  ],
+  "supported_languages": ["en"]
+}

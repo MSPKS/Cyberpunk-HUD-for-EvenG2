@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Cyberpunk HUD · Even G2</title>
+    <style>
+      @font-face { font-family: 'Rajdhani'; font-weight: 500; src: url(./fonts/rajdhani-500.woff2) format('woff2'); }
+      @font-face { font-family: 'Rajdhani'; font-weight: 600; src: url(./fonts/rajdhani-600.woff2) format('woff2'); }
+      @font-face { font-family: 'Rajdhani'; font-weight: 700; src: url(./fonts/rajdhani-700.woff2) format('woff2'); }
+
+      :root { --bg: #0b0b0d; --panel: #141418; --line: #2a2a31; --text: #e6e6ea; --dim: #8c8c96; --yellow: #fcee0a; --cyan: #00f0ff; }
+      html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text);
+        font: 15px/1.4 Rajdhani, -apple-system, system-ui, sans-serif; touch-action: manipulation;
+        -webkit-text-size-adjust: 100%; overscroll-behavior: none; }
+      main { max-width: 640px; margin: 0 auto; padding: 16px 16px 40px; }
+      h1 { font-size: 20px; font-weight: 700; letter-spacing: 2px; margin: 0 0 2px; color: var(--yellow); text-transform: uppercase; }
+      h1 small { color: var(--dim); font-weight: 500; letter-spacing: 1px; font-size: 13px; margin-left: 8px; }
+      h2 { font-size: 13px; letter-spacing: 2px; text-transform: uppercase; color: var(--cyan); margin: 20px 0 8px; }
+      .preview { width: 100%; aspect-ratio: 2 / 1; background: #000; border: 1px solid var(--line);
+        clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px); image-rendering: pixelated; }
+      .hint { color: var(--dim); font-size: 13px; margin: 6px 0 0; }
+      .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+      label { display: flex; flex-direction: column; gap: 4px; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; color: var(--dim); }
+      select, input[type=text], button { font: inherit; font-weight: 600; color: var(--text); background: var(--panel);
+        border: 1px solid var(--line); border-radius: 0; padding: 10px 12px; -webkit-appearance: none; appearance: none; }
+      button { cursor: pointer; border-color: var(--yellow); color: var(--yellow); text-transform: uppercase; letter-spacing: 1px; }
+      button.secondary { border-color: var(--line); color: var(--text); }
+      .row { display: flex; gap: 8px; align-items: stretch; }
+      .row input { flex: 1; min-width: 0; }
+      .toggle { display: flex; align-items: center; gap: 10px; text-transform: none; font-size: 15px; letter-spacing: 0; color: var(--text); flex-direction: row; }
+      .toggle input { width: 22px; height: 22px; accent-color: var(--yellow); }
+      dl { display: grid; grid-template-columns: max-content 1fr; gap: 4px 12px; margin: 0; font-size: 13px; }
+      dt { color: var(--dim); text-transform: uppercase; letter-spacing: 1px; font-size: 11px; padding-top: 2px; }
+      dd { margin: 0; word-break: break-word; }
+      pre { background: var(--panel); border: 1px solid var(--line); padding: 10px; font: 11px/1.5 ui-monospace, Menlo, monospace;
+        color: var(--dim); max-height: 200px; overflow: auto; white-space: pre-wrap; }
+      .legend { font-size: 13px; color: var(--dim); }
+      .legend b { color: var(--text); font-weight: 600; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Cyberpunk HUD <small>// Even G2</small></h1>
+      <p class="hint">What the glasses are showing (tinted to the G2's green). Tap = zoom · swipe = zoom in/out · hold = north-up/heading-up · double-tap = exit.</p>
+      <canvas id="preview" class="preview" width="576" height="288"></canvas>
+
+      <h2>Job / destination</h2>
+      <div class="row">
+        <input id="dest" type="text" placeholder="Address or place name" autocomplete="off" />
+        <button id="dest-set">Track</button>
+        <button id="dest-clear" class="secondary">Clear</button>
+      </div>
+
+      <h2>Settings</h2>
+      <div class="grid">
+        <label>Units <select id="units"><option value="metric">Metric · km/h · m · °C</option><option value="imperial">Imperial · mph · ft · °F</option></select></label>
+        <label>Map orientation <select id="orientation"><option value="heading">Heading up</option><option value="north">North up</option></select></label>
+        <label>Minimap zoom <select id="zoom"></select></label>
+        <label>Map refresh <select id="interval"><option value="1000">every 1 s</option><option value="2000">every 2 s</option><option value="4000">every 4 s</option><option value="8000">every 8 s</option></select></label>
+      </div>
+      <p></p>
+      <div class="grid">
+        <label class="toggle"><input id="crosshair" type="checkbox" /> Crosshair on the glasses</label>
+        <label class="toggle"><input id="demo" type="checkbox" /> Demo mode (simulated walk)</label>
+        <button id="compass" class="secondary">Enable phone compass</button>
+        <button id="resend" class="secondary">Resend all to glasses</button>
+        <button id="notify-test" class="secondary">Test notification</button>
+      </div>
+
+      <h2>Status</h2>
+      <dl id="status"></dl>
+
+      <h2>Log</h2>
+      <pre id="log"></pre>
+
+      <h2>What maps to what</h2>
+      <p class="legend">
+        <b>Minimap</b> OpenStreetMap roads around you, heading-up like the game · <b>Clock</b> real time, date and
+        outdoor temperature · <b>Street</b> reverse-geocoded · <b>Quest tracker</b> the destination above, with
+        distance and bearing (the empty panel hides after 30 s) · <b>Ammo counter</b> your speed ·
+        <b>Weapon name</b> movement mode · <b>Stamina</b> glasses battery · <b>Quickslot</b> GPS accuracy ·
+        <b>Crosshair</b> optional, toggled here only.
+      </p>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
